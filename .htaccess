@@ -1,0 +1,30 @@
+# Deny access to all .php files
+<Files *.php>
+    Order Deny,Allow
+    Deny from all
+    #Allow from 127.0.0.1
+</Files>
+# exept for index.php
+<Files index.php>
+    Order Allow,Deny
+    Allow from all
+</Files>
+
+<IfModule mod_rewrite.c>
+
+  RewriteEngine on
+  # Si votre application est dans un sous-dossier
+  RewriteBase /test/PHPelelep/
+
+  # test string is a valid files
+  RewriteCond %{SCRIPT_FILENAME} !-f
+  # test string is a valid directory
+  RewriteCond %{SCRIPT_FILENAME} !-d
+
+  DirectoryIndex index.php  index.html
+
+  RewriteRule ^(.*)$   index.php?uri=$1    [NC,L,QSA]
+  # with QSA flag (query string append),
+  # forces the rewrite engine to append a query string part of the
+  # substitution string to the existing string, instead of replacing it.
+</IfModule>
